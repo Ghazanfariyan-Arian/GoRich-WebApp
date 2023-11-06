@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Expenses</title>
+	<link rel="stylesheet" href="style/ExpensesStyle.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header>
+		<h1>Expenses</h1>
+	</header>
+	<div class="container">
+		<table id="expensesTable" border="1">
+		<tr>
+		<th>ID</th>
+		<th>title</th>
+		<th>date</th>
+		<th>price</th>
+		<th>category</th>
+		</tr>
+		<!-- Rows will be dynamically added here -->
+		</table>
+	</div>
+	<footer>
+		<p>© 2023 GoRich | ArxFuture</p>
+	</footer>
+	<script>
+		$(document).ready(function(){
+		$.ajax({
+		url: "http://localhost:8080/GoRich-WebApp/rest/expenses",
+		type: 'GET',
+		success: function(result){
+		var table = $("#expensesTable");
+		result.forEach(function(expense){
+		var row = $("<tr></tr>");
+		row.append($("<td></td>").text(expense.id));
+		row.append($("<td></td>").text(expense.title));
+		row.append($("<td></td>").text(expense.date));
+		row.append($("<td></td>").text(expense.price));
+		row.append($("<td></td>").text(expense.category));
+		table.append(row);
+		});
+		},
+		error: function(error){
+		console.log(error);
+		}
+		});
+		});
+	</script>
+</body>
+</html>

@@ -9,6 +9,8 @@ import presistence.DAO.ExpensesDAO;
 
 import java.util.List;
 
+import com.agh.studentapp.Student;
+
 import business.model.Expense;
 
 @Path("/expenses")
@@ -22,5 +24,14 @@ public class ExpensesController {
 	{
 		System.out.println("Hello");
 		return expensesDAO.readAll();
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Expense createStudent(Expense expense)
+	{
+		expensesDAO.addExpense(expense);
+		return expense;
 	}
 }

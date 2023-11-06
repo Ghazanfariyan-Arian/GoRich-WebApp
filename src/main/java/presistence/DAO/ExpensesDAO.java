@@ -1,6 +1,7 @@
 package presistence.DAO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,10 +15,11 @@ public class ExpensesDAO {
 	
 	public List<Expense> readAll()
 	{
-		System.out.println("In ExpensesDAO");
 		String command = "SELECT id,title,date,price,category FROM [dbo.Expenses]";
 		List<Expense> expenses = new ArrayList<Expense>();
-		try(Connection conn = DatabaseConnection.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(command))
+		try(Connection conn = DatabaseConnection.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(command))
 		{
 			while(rs.next())
 			{
@@ -36,6 +38,24 @@ public class ExpensesDAO {
 		}
 		
 		return expenses;
+	}
+	
+	public void addExpense(Expense expense)
+	{
+		String command = "INSERT INTO [dbo.Expenses] (title,date,price,category) VALUES (?,?,?,?)";
+		try(Connection conn = DatabaseConnection.connect(); PreparedStatement stat = conn.prepareStatement(command))
+		{
+			stat.setString(1, expense.getTitle());
+			stat.setString(2, expense.getDate());
+			stat.setDouble(3, expense.getPrice());
+			stat.setString(4, expense.getCategory());
+			stat.executeUpdate();
+			
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
 	}
 
 }
